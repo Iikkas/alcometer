@@ -1,25 +1,104 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
 
-function App() {
+export default function App() {
+  const [weight, setWeight] = useState(0);
+  const [bottles, setBottles] = useState(0);
+  const [time, setTime] = useState(0);
+  const [gender, setGender] = useState("male");
+  const [result, setResult] = useState(0);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    let litres = bottles * 0.33;
+    let grams = litres * 8 * 4.5;
+    let burning = weight / 10;
+    let gramsLeft = grams - burning * time;
+    let answer = 0;
+
+    if (gender === "male") {
+      answer = gramsLeft / (weight * 0.7);
+      if (answer < 0) {
+        setResult(0);
+      } else {
+        setResult(answer);
+      }
+    } else {
+      answer = gramsLeft / (weight * 0.6);
+      if (answer < 0) {
+        setResult(0);
+      } else {
+        setResult(answer);
+      }
+    }
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <h3>Alcometer</h3>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Weight</label>
+          <input onChange={(e) => setWeight(e.target.value)} />
+        </div>
+        <div>
+          <label>Bottles</label>
+          <select
+            name="bottles"
+            id="bottles"
+            onChange={(e) => setBottles(e.target.value)}
+          >
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+          </select>
+        </div>
+        <div>
+          <label>Time</label>
+          <select
+            name="time"
+            id="time"
+            onChange={(e) => setTime(e.target.value)}
+          >
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+          </select>
+        </div>
+        <div>
+          <label>Gender</label>
+          <input
+            type="radio"
+            name="gender"
+            value="male"
+            defaultChecked
+            onChange={(e) => setGender(e.target.value)}
+          />
+          <label>Male</label>
+          <input
+            type="radio"
+            name="gender"
+            value="female"
+            onChange={(e) => setGender(e.target.value)}
+          />
+          <label>Female</label>
+        </div>
+        <div>
+          <output>{result.toFixed(2)}</output>
+        </div>
+        <button onClick="handleSubmit">Calculate</button>
+      </form>
+    </>
   );
 }
-
-export default App;
